@@ -1,4 +1,4 @@
-# This is what I leared today
+# This is what I leared day 1
 __day 1__
 
 _italic text_
