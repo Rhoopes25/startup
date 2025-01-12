@@ -20,7 +20,12 @@ git status
 git add
 git commit or push
 ```
-## Technologies
+
+##Elevator Pitch 
+
+##Key Features
+
+##Technologies
 
 I am going to use the required technologies in the following ways.
 
@@ -39,3 +44,5 @@ __Authetication__ - Implement user authentication. After login, display a person
 __Database Data__ - Store data in a database. Emotion ratings and journal entries. 
 
 __WebSocket Data__ - Send daily motivational messages to all logged-in users in real time. A user logs in, and a real-time notification appears
+
+##Design Images
