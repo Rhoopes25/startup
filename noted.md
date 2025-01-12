@@ -46,3 +46,5 @@ __Database Data__ - Store data in a database. Emotion ratings and journal entrie
 __WebSocket Data__ - Send daily motivational messages to all logged-in users in real time. A user logs in, and a real-time notification appears
 
 ## Design Images
+
+# hi my name is rachel
