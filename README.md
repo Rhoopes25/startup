@@ -26,4 +26,4 @@ __WebSocket Data__ - Send daily motivational messages to all logged-in users in 
 
 ## Design Images
 
-![Mock](/Users/rachelhoopes/Downloads/startupDraw.jpg)
+![Mock](image-1.png)
