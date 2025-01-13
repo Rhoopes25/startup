@@ -32,6 +32,6 @@ I am going to use the required technologies in the following ways.
 
 - __WebSocket Data__ - Send daily motivational messages to all logged-in users in real-time. A user logs in, and a real-time notification appears 
 
-## Design Images
+## Design Image
 
 ![Mock](image-1.png)
