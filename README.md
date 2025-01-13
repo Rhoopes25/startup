@@ -1,5 +1,7 @@
 ## Elevator Pitch 
 
+Have you ever struggled to make sense of your emotions after a tough day, or felt unsure how to calm your mind when stress takes over? The Emotional Check-In app offers a simple, effective way to reconnect with yourself. Users can log how they’re feeling, journal their thoughts, and practice calming exercises. As you track your emotions over time, the app helps you recognize patterns and build emotional resilience. It’s a safe, supportive tool to help you feel heard, understood, and more in control of your well-being. 
+
 ## Key Features
 
 ## Technologies
