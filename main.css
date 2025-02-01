@@ -1,8 +1,9 @@
 body {
-    background-image: url('https://images.unsplash.com/photo-1560790671-b76ca4de55ef?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Zmxvd2VyfGVufDB8fDB8fHww');
+    background-image: url('https://img.freepik.com/free-photo/pastel-blue-vignette-concrete-textured-background_53876-102637.jpg?ga=GA1.1.844278399.1737852125&semt=ais_hybrid');
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-position: center top;
     position: relative;
     color: #fff; /* Ensure text is readable */
     display: flex;
@@ -33,7 +34,8 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -300px; /* Adjust for the fixed header height */
+    margin-top: 60
+    px; /* Adjust for the fixed header height */
 }
 
 .Name {
