@@ -1,1 +1,56 @@
-ma
+body {
+    background-image: url('https://images.unsplash.com/photo-1560790671-b76ca4de55ef?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Zmxvd2VyfGVufDB8fDB8fHww');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    color: #fff; /* Ensure text is readable */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.bg-overlay {
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency here */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+header {
+    background-color: rgba(0, 0, 0, 0.8); /* Background color for the header */
+    color: #fff; /* Text color for the header */
+    padding: 10px 0;
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure it stays on top */
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -300px; /* Adjust for the fixed header height */
+}
+
+.Name {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Light background for readability */
+    border-radius: 10px;
+    color: #000; /* Dark text for contrast */
+}
+
+.custom-btn {
+    margin-top: 10px;
+}
+
+footer {
+    background-color: #d3d3d3; /* Light grey background */
+    color: #000; /* Black text */
+    padding: 10px 0;
+    text-align: center;
+}
