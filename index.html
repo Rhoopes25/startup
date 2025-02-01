@@ -1,20 +1,28 @@
 <body>
     <header>
-        <h1>Emotional Check-In yay</h1>
-        
+        <h1>Emotional Check-In</h1>
     </header>
-     <div class="Name">
+
+    <div class="Name">
         <h2>Login</h2>
-        <form method="get" action="rate.html">
+        <form id="loginForm">
             <label for="email">Email: </label>
-            <input type="email" id="email" name="varEmail" />
+            <input type="email" id="email" name="varEmail" required />
+            
             <label for="password">Password: </label>
-            <input type="password" id="password" name="varPassword" />
-            <button type="submit" class="btn btn-primary btn-block btn-large">Get Started</button>
+            <input type="password" id="password" name="varPassword" required />
+            
+            <button type="button" class="btn btn-primary btn-block btn-large" onclick="redirectToRate()">Get Started</button>
         </form>
     </div>
 
-   <footer>
+    <footer>
         <a href="https://github.com/Rhoopes25/startup/tree/main" target="_blank">GitHub</a>
     </footer>
+
+    <script>
+        function redirectToRate() {
+            window.location.href = "rate.html";
+        }
+    </script>
 </body>
