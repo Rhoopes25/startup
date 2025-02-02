@@ -35,3 +35,24 @@ I am going to use the required technologies in the following ways.
 ## Design Image
 
 ![Mock](image-1.png)
+## HTML deliverable
+
+For this deliverable I built out the structure of my application using HTML.
+
+- [x] **HTML pages** - Four HTML page that represent the ability to login and vote.
+- [x] **Links** - The login page automatically links to the rate page. The rate page contains links journal and breathe page. Journal page links to breathe and rate page. Breathe page links to all other pages.
+- [x] **Text** - Each button has a textual description, making it clear and easy for users to understand their options.
+- [x] **Images** - image on the last page of breathing 
+- [x] **DB/Login** - Input box and submit button for login. The rate emotions represent data pulled from the database. Also the journal will store data
+- [x] **WebSocket** - When you click the emotion buttons it will pop up with a response.
+
+## CSS deliverable
+
+For this deliverable I properly styled the application into its final appearance.
+
+- [x] **Header, footer, and main content body**
+- [x] **Navigation elements** - I dropped the underlines and changed the color for anchor elements.
+- [x] **Responsive to window resizing** - I made it so my app will adjust to all sizes
+- [x] **Application elements** - Used good contrast and whitespace
+- [x] **Application text content** - Consistent fonts
+- [x] **Application images** - background image and image on last page(added a boarder)
