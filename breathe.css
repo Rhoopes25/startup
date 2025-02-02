@@ -71,7 +71,11 @@ ol li {
     padding: 0px; /* Space between the image and the border */
 }
 
-
+@media (max-width: 600px) {
+    .image-border {
+        display: none; /* Hide the image on screens smaller than 600px */
+    }
+}
 
 footer {
     background-color: #aaaeaf; /* Light grey background */
