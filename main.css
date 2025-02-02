@@ -11,11 +11,7 @@ body {
     min-height: 100vh;
 }
 
-.bg-overlay {
-    background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency here */
-    padding: 20px;
-    border-radius: 10px;
-}
+
 
 header {
     background-color: rgba(0, 0, 0, 0.8); /* Background color for the header */

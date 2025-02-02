@@ -22,10 +22,50 @@ header {
     left: 0;
     z-index: 1000; /* Ensure it stays on top */
 }
-
+header nav {
+    display: flex;
+    gap: 15px;
+}
+header .nav-link {
+    color: #fff; /* White text color */
+    text-decoration: none; /* Remove underline */
+    font-size: 18px;
+}
 footer {
     background-color: #d3d3d3; /* Light grey background */
     color: #000; /* Black text */
     padding: 10px 0;
     text-align: center;
+}
+main {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px; /* Adjusted for a slightly higher position */
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+.custom-btn {
+    background-color: #ff69b4; /* Cute pink color */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+.custom-btn:hover {
+    background-color: #ff1493; /* Darker pink on hover */
 }

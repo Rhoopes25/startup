@@ -10,25 +10,29 @@
 </head>
 
 <body>
-    <header class="fixed-top">
-        <h1>Emotional Check-In</h1>
-        <menu>
-            <a href="journal.html">Journal</a>
-            <a href="breathe.html">Breathe</a>
-          </menu>
+    <header class="fixed-top d-flex justify-content-between align-items-center p-3">
+        <h1 class="m-0">Emotional Check-In</h1>
+        <nav>
+            <a href="journal.html" class="nav-link">Journal</a>
+            <a href="breathe.html" class="nav-link">Breathe</a>
+        </nav>
     </header>
 
-    <section>
-        <h2>How are you feeling?</h2>
-        <p>Track your emotions and check in with yourself regularly for better well-being.</p>
 
-        <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Angry</span></button>
-        <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Sad</span></button>
-        <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Happy</span></button>
-        <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Stressed</span></button>
-        <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Anxious</span></button>
-        <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Calm</span></button>
-    </section>
+    <main class="d-flex flex-column justify-content-center align-items-center text-center flex-grow-1">
+        <div class="bg-overlay">
+            <h2>How are you feeling?</h2>
+            <p>Track your emotions and check in with yourself regularly for better well-being.</p>
+            <div class="button-group">
+                <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Angry</span></button>
+                <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Sad</span></button>
+                <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Happy</span></button>
+                <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Stressed</span></button>
+                <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Anxious</span></button>
+                <button class="custom-btn btn-3" onclick="location.href='journal.html'"><span>Calm</span></button>
+            </div>
+        </div>
+    </main>
 
     <footer class="bg-light text-dark fixed-bottom">
         <div class="container-fluid">
