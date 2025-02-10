@@ -47,3 +47,11 @@ __WebSocket Data__ - Send daily motivational messages to all logged-in users in 
 
 ## Design Images
 
+__Vite__ - a JavaScript build tool that helps developers build modern web projects faster and more efficiently.
+
+__bootstrap__ - a free, open-source front-end development framework that allows developers to quickly build responsive websites by providing pre-designed HTML, CSS, and JavaScript components like buttons, grids, forms, and navigation menus
+
+__REACT__ - a JavaScript library used to build user interfaces (UIs) for web and mobile applications.\
+
+__JSX__ - JSX is a syntax extension for JavaScript that lets you write HTML-like markup inside a JavaScript file
+
