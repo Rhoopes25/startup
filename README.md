@@ -38,7 +38,7 @@ I am going to use the required technologies in the following ways.
 
 ## Design Image
 
-![Mock](image-1.png)
+![Mock](image.png)
 ## HTML deliverable
 
 For this deliverable I built out the structure of my application using HTML.
