@@ -15,7 +15,7 @@ export default function App() {
         <header>
         <h1>Emotional Check-In</h1>
         <nav>
-            <NavLink className='nav-link' to='/login'>Login Page</NavLink>
+            <NavLink className='nav-link' to='/'>Login Page</NavLink>
             <NavLink className='nav-link' to='/rate'>Log Emotions</NavLink>
             <NavLink className='nav-link' to='/journal'>Journal</NavLink>
             <NavLink className='nav-link' to='/breathe'>Breathe</NavLink>
@@ -24,7 +24,7 @@ export default function App() {
   
         <main>
           <Routes>
-            <Route path='/login' element={<Login />} />
+            <Route path='/' element={<Login />} />
             <Route path='/rate' element={<Rate />} />
             <Route path='/journal' element={<Journal />} />
             <Route path='/breathe' element={<Breathe />} />
