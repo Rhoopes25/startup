@@ -12,7 +12,7 @@ body {
 }
 
 header {
-    background-color: #aaaeaf;; /* Background color for the header */
+    background-color: #aaaeaf; /* Corrected the extra semicolon */
     color: #fff; /* Text color for the header */
     padding: 10px 0;
     width: 100%;
@@ -22,10 +22,12 @@ header {
     left: 0;
     z-index: 1000; /* Ensure it stays on top */
 }
+
 header nav {
     display: flex;
     gap: 15px;
 }
+
 header .nav-link {
     color: #fff; /* White text color */
     text-decoration: none; /* Remove underline */
@@ -35,12 +37,14 @@ header .nav-link {
 header .nav-link:hover {
     text-decoration: underline; /* Underline on hover */
 }
+
 footer {
     background-color: #d3d3d3; /* Light grey background */
     color: #000; /* Black text */
     padding: 10px 0;
     text-align: center;
 }
+
 main {
     flex-grow: 1;
     display: flex;
@@ -52,24 +56,28 @@ main {
 .button-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px; /* Increased gap for more space between buttons */
     justify-content: center;
     margin-top: 20px;
+    padding: 20px; /* Optional: Adding padding for a nicer layout */
 }
+
 .custom-btn {
     background-color: #ff69b4; /* Cute pink color */
     border: none;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 25px; /* Adjusted padding for larger buttons */
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    font-size: 18px; /* Increased font size for better visibility */
+    margin: 10px; /* Added margin to space out buttons */
     cursor: pointer;
     border-radius: 12px;
     transition: background-color 0.3s ease;
+    min-width: 120px; /* Set a minimum width for consistency */
 }
+
 .custom-btn:hover {
     background-color: #ff1493; /* Darker pink on hover */
 }

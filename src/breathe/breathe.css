@@ -5,7 +5,7 @@
     background-attachment: fixed;
     background-position: center top;
     position: relative;
-    color: #fff; /* Ensure text is readable */
+    color: #000; /* Ensure text is readable */
     display: flex;
     flex-direction: column;
     min-height: 100vh;

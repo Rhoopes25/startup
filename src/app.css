@@ -1,15 +1,16 @@
-.body {
+body {
     background-image: url('https://img.freepik.com/free-photo/pastel-blue-vignette-concrete-textured-background_53876-102637.jpg?ga=GA1.1.844278399.1737852125&semt=ais_hybrid');
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center top;
     position: relative;
-    color: #fff; /* Ensure text is readable */
+    color: #000; /* Default text color for readability */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
+
 header {
     background-color: #aaaeaf; /* Background color for the header */
     color: #fff; /* Text color */
@@ -43,25 +44,69 @@ header nav a {
 header nav a:hover {
     text-decoration: underline; /* Underline on hover */
 }
+
 main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 80px; /* Adjusted for a slightly higher position */
+    margin-top: 120px; /* Adjusted for spacing under header */
 }
 
 .Name {
-    margin: 20px auto;
-    padding: 20px;
+    margin: 10px auto; /* Reduced margin to take up less space */
+    padding: 10px 10px; /* Reduced padding to make it more compact */
     background-color: rgba(255, 255, 255, 0.8); /* Light background for readability */
     border-radius: 10px;
     color: #000; /* Dark text for contrast */
+    width: 100%; /* Reduced width to prevent it from being too wide */
+    max-width: 500px; /* Set max width to control the size */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
 }
 
+/* Input group for label and input field */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.input-group input {
+    width: 100%; /* Ensure inputs are the same width */
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; /* Ensure padding does not affect width */
+}
+
+/* Button styling */
 .custom-btn {
-    margin-top: 10px;
+    margin-top: 20px;
+    background-color: #ff1493; /* Calm pink button color */
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Make button full width */
+    max-width: 200px;
+}
+
+.custom-btn:hover {
+    background-color: #e6007d; /* Darker pink on hover */
 }
 
 .custom-footer {
@@ -75,4 +120,3 @@ main {
     left: 0;
     border-top: 1px solid #ccc; /* Optional: subtle separator */
 }
-
