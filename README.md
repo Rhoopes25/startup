@@ -60,3 +60,9 @@ For this deliverable I properly styled the application into its final appearance
 - [x] **Application elements** - Used good contrast and whitespace
 - [x] **Application text content** - Consistent fonts
 - [x] **Application images** - background image and image on last page(added a boarder)
+
+## React part 1: Routing deliverable
+
+- [x] **Bundled using Vite** - Easy to install and use Vite.
+- [x] **Components** - Easy to bring the code over from HTML and CSS, but had to rework them quite a bit.
+- [x] **Router** - Easy to creating the component routing.
