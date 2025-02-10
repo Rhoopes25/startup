@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotional Check-In</title>
+    <link rel="stylesheet" href="journal.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+
+<body>
+    <header class="fixed-top d-flex justify-content-between align-items-center p-3">
+        <h1 class="m-0">Emotional Check-In</h1>
+        <nav>
+            <a href="rate.html" class="nav-link">Log Emotions</a>
+            <a href="breathe.html" class="nav-link">Breathe</a>
+        </nav>
+    </header>
+    <main class="d-flex flex-column justify-content-center align-items-center text-center flex-grow-1">
+        <section class="bg-overlay">
+            <h2>Want to share more about how you are feeling?</h2>
+            <textarea id="textarea" name="varTextarea" rows="50" cols="50" class="cute-textarea"></textarea><br>
+            <button class="custom-btn btn-3" onclick="location.href='breathe.html'"><span>Save</span></button>
+        </section>
+    </main>
+
+    <footer class="bg-light text-dark fixed-bottom">
+        <div class="container-fluid">
+            <span class="text-reset">Rachel Hoopes</span>
+            <a class="text-reset" href="https://github.com/Rhoopes25/startup/tree/main" target="_blank">GitHub</a>
+        </div>
+    </footer>
+
+</body>
