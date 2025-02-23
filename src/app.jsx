@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
-import { BrowserRouter, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, NavLink, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import { Login } from './login/login';
 import { Breathe } from './breathe/breathe';
 import { Rate } from './rate/rate';
@@ -10,12 +10,22 @@ import { Journal } from './journal/journal';
 
 function App() {
   const location = useLocation(); // Get the current location
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in
+    const email = localStorage.getItem('email');
+    const password = localStorage.getItem('password');
+    if (email && password) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   return (
     <div className='body bg-dark text-light'>
       <header>
         <h1>Emotional Check-In</h1>
-        {location.pathname !== '/' && ( // Conditionally render the nav
+        {location.pathname !== '/' && isLoggedIn && ( // Conditionally render the nav
           <nav>
             <NavLink className='nav-link' to='/'>Login Page</NavLink>
             <NavLink className='nav-link' to='/rate'>Log Emotions</NavLink>
@@ -28,10 +38,16 @@ function App() {
       <main>
         <Routes>
           <Route path='/' element={<Login />} />
-          <Route path='/rate' element={<Rate />} />
-          <Route path='/journal' element={<Journal />} />
-          <Route path='/breathe' element={<Breathe />} />
-          <Route path='/play' element={<h2>Play Page</h2>} />
+          {isLoggedIn ? (
+            <>
+              <Route path='/rate' element={<Rate />} />
+              <Route path='/journal' element={<Journal />} />
+              <Route path='/breathe' element={<Breathe />} />
+              <Route path='/play' element={<h2>Play Page</h2>} />
+            </>
+          ) : (
+            <Route path='*' element={<Navigate to='/' />} />
+          )}
         </Routes>
       </main>
 
