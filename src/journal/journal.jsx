@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './journal.css';
 
-
-import { useNavigate } from 'react-router-dom'; // Assuming you're using React Router for navigation
-
 export function Journal() {
-  const navigate = useNavigate();  // Using the useNavigate hook to handle navigation
-  
+  const navigate = useNavigate();
+  const [journalEntry, setJournalEntry] = useState('');
+  const userEmail = localStorage.getItem('email'); // Retrieve user email from localStorage
+
+  useEffect(() => {
+    // Load saved journal entry for the logged-in user
+    if (userEmail) {
+      const savedEntry = localStorage.getItem(`journal_${userEmail}`);
+      if (savedEntry) {
+        setJournalEntry(savedEntry);
+      }
+    }
+  }, [userEmail]);
+
   const handleSave = () => {
-    navigate('/breathe'); // Navigates to the 'breathe' route
+    if (userEmail) {
+      localStorage.setItem(`journal_${userEmail}`, journalEntry); // Save entry
+    }
+    navigate('/breathe'); // Navigate to the 'breathe' page
   };
 
   return (
@@ -18,14 +31,14 @@ export function Journal() {
         <textarea 
           id="textarea" 
           name="varTextarea" 
-          rows="50" 
+          rows="10" 
           cols="50" 
           className="cute-textarea"
-        ></textarea><br />
-        <button 
-          className="custom-btn btn-3" 
-          onClick={handleSave}  // React event handler
-        >
+          value={journalEntry}
+          onChange={(e) => setJournalEntry(e.target.value)} // Update state when typing
+        ></textarea>
+        <br />
+        <button className="custom-btn btn-3" onClick={handleSave}>
           <span>Save</span>
         </button>
       </section>
