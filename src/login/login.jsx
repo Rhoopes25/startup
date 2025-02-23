@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook from react-router-dom
 
 export function Login() {
-  const navigate = useNavigate(); // Create an instance of useNavigate
+  const navigate = useNavigate(); 
 
   // Function to handle button click and navigate to the rate page
   const handleGetStarted = (e) => {

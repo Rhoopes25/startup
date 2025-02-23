@@ -2,26 +2,30 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { Login } from './login/login';
 import { Breathe } from './breathe/breathe';
 import { Rate } from './rate/rate';
 import { Journal } from './journal/journal';
 
 export default function App() {
-    return (
-     <BrowserRouter>
+  const location = useLocation(); // Get the current location
+
+  return (
+    <BrowserRouter>
       <div className='body bg-dark text-light'>
         <header>
-        <h1>Emotional Check-In</h1>
-        <nav>
-            <NavLink className='nav-link' to='/'>Login Page</NavLink>
-            <NavLink className='nav-link' to='/rate'>Log Emotions</NavLink>
-            <NavLink className='nav-link' to='/journal'>Journal</NavLink>
-            <NavLink className='nav-link' to='/breathe'>Breathe</NavLink>
-          </nav>
-      </header>
-  
+          <h1>Emotional Check-In</h1>
+          {location.pathname !== '/' && ( // Conditionally render the nav
+            <nav>
+              <NavLink className='nav-link' to='/'>Login Page</NavLink>
+              <NavLink className='nav-link' to='/rate'>Log Emotions</NavLink>
+              <NavLink className='nav-link' to='/journal'>Journal</NavLink>
+              <NavLink className='nav-link' to='/breathe'>Breathe</NavLink>
+            </nav>
+          )}
+        </header>
+
         <main>
           <Routes>
             <Route path='/' element={<Login />} />
@@ -31,7 +35,7 @@ export default function App() {
             <Route path='/play' element={<h2>Play Page</h2>} />
           </Routes>
         </main>
-  
+
         <footer className='custom-footer'>
           <div className='container-fluid'>
             <span className='text-reset'>Rachel Hoopes </span>
@@ -41,11 +45,10 @@ export default function App() {
           </div>
         </footer>
       </div>
-      </BrowserRouter>
-    );
-  }
+    </BrowserRouter>
+  );
+}
 
-
-  function NotFound() {
-    return <main className='container-fluid bg-secondary text-center'>404: Return to sender. Address unknown.</main>;
-  }
+function NotFound() {
+  return <main className='container-fluid bg-secondary text-center'>404: Return to sender. Address unknown.</main>;
+}
