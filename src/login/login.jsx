@@ -1,13 +1,45 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook from react-router-dom
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function Login() {
-  const navigate = useNavigate(); // Create an instance of useNavigate
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  // Function to handle button click and navigate to the rate page
   const handleGetStarted = (e) => {
-    e.preventDefault(); // Prevent form submission
-    navigate('/rate'); // Navigate to the rate page
+    e.preventDefault();
+
+    if (!email.includes('@')) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    if (password.length === 0) {
+      setError('Please enter a password.');
+      return;
+    }
+
+    // Get stored users from localStorage
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || {};
+
+    if (storedUsers[email]) {
+      // User exists, check password
+      if (storedUsers[email] === password) {
+        localStorage.setItem('email', email);
+        localStorage.setItem('password', password);
+        navigate('/rate');
+      } else {
+        setError('Invalid email or password.');
+      }
+    } else {
+      // New user, store credentials
+      storedUsers[email] = password;
+      localStorage.setItem('users', JSON.stringify(storedUsers));
+      localStorage.setItem('email', email);
+      localStorage.setItem('password', password);
+      navigate('/rate');
+    }
   };
 
   return (
@@ -19,17 +51,26 @@ export function Login() {
           <form>
             <div className="input-group">
               <label htmlFor="email">Email: </label>
-              <input type="email" id="email" name="varEmail" />
+              <input
+                type="email"
+                id="email"
+                name="varEmail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="input-group">
               <label htmlFor="password">Password: </label>
-              <input type="password" id="password" name="varPassword" />
+              <input
+                type="password"
+                id="password"
+                name="varPassword"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
-            {/* Updated button to use the handleGetStarted function */}
-            <button
-              className="custom-btn btn-3"
-              onClick={handleGetStarted} // On click, call handleGetStarted
-            >
+            {error && <p className="text-danger">{error}</p>}
+            <button className="custom-btn btn-3" onClick={handleGetStarted}>
               <span>Get Started</span>
             </button>
           </form>
@@ -38,3 +79,4 @@ export function Login() {
     </main>
   );
 }
+
