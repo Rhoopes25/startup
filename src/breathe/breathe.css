@@ -10,6 +10,7 @@
     flex-direction: column;
     min-height: 100vh;
 }
+
 header {
     background-color: #aaaeaf; /* Background color for the header */
     color: #fff; /* Text color for the header */
@@ -21,10 +22,12 @@ header {
     left: 0;
     z-index: 1000; /* Ensure it stays on top */
 }
+
 header nav {
     display: flex;
     gap: 15px;
 }
+
 header .nav-link {
     color: #fff; /* White text color */
     text-decoration: none; /* Remove underline */
@@ -34,13 +37,16 @@ header .nav-link {
 header .nav-link:hover {
     text-decoration: underline; /* Underline on hover */
 }
+
 main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* Align items to the top */
     align-items: center;
     margin-top: 80px; /* Adjusted for a slightly higher position */
+    padding-bottom: 20px; /* Add padding to the bottom */
+    overflow-y: auto; /* Allow scrolling if content overflows */
 }
 
 .pink-box {
@@ -49,8 +55,9 @@ main {
     border-radius: 15px; /* Rounded corners */
     width: 90%; /* Adjust width as needed */
     max-width: 600px; /* Ensure it doesn't get too wide */
-    margin: 0 auto; /* Center the box */
+    margin: 20px auto; /* Center the box and add margin */
 }
+
 ol {
     display: flex;
     flex-direction: column;
@@ -65,10 +72,12 @@ ol li {
     text-align: left; /* Align text to the left */
     padding-left: 70px; /* Add padding to align numbers with text */
 }
+
 .image-border {
     border: 2px solid #000000; /* Pink border */
     border-radius: 10px; /* Rounded corners */
     padding: 0px; /* Space between the image and the border */
+    margin: 20px 0; /* Add margin to the image */
 }
 
 @media (max-width: 600px) {
@@ -82,4 +91,6 @@ footer {
     color: #fff; /* Black text */
     padding: 10px 0;
     text-align: center;
+    position: relative; /* Ensure footer stays at the bottom */
 }
+
