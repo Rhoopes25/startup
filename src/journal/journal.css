@@ -22,10 +22,12 @@ header {
     left: 0;
     z-index: 1000; /* Ensure it stays on top */
 }
+
 header nav {
     display: flex;
     gap: 15px;
 }
+
 header .nav-link {
     color: #fff; /* White text color */
     text-decoration: none; /* Remove underline */
@@ -35,6 +37,7 @@ header .nav-link {
 header .nav-link:hover {
     text-decoration: underline; /* Underline on hover */
 }
+
 main {
     flex-grow: 1;
     display: flex;
@@ -43,6 +46,7 @@ main {
     color: #000;
     margin-top: 80px; /* Adjusted for a slightly higher position */
 }
+
 .cute-textarea {
     width: 100%;
     max-width: 600px;
@@ -55,6 +59,7 @@ main {
     font-size: 16px;
     resize: none; /* Prevent resizing */
 }
+
 .custom-btn {
     background-color: #ff69b4; /* Cute pink color */
     border: none;
@@ -69,15 +74,58 @@ main {
     border-radius: 12px;
     transition: background-color 0.3s ease;
 }
+
 .custom-btn:hover {
     background-color: #ff1493; /* Darker pink on hover */
 }
+
+.toggle-journals-btn {
+    position: absolute;
+    top: 60px; /* Adjusted to be lower than the header */
+    left: 10px;
+}
+
+.past-journals {
+    margin-top: 20px;
+}
+
+.journals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Reduced gap for more compact layout */
+}
+
+.journal-item {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5px; /* Reduced padding for more compact layout */
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.journal-date {
+    cursor: pointer;
+    font-weight: bold;
+    color: #ff69b4; /* Cute pink color */
+    transition: color 0.3s ease;
+}
+
+.journal-date:hover {
+    color: #ff1493; /* Darker pink on hover */
+}
+
+.clear-journal-btn {
+    padding: 4px 8px; /* Smaller padding for a smaller button */
+    font-size: 12px; /* Smaller font size */
+    min-width: 80px; /* Ensure the button has a minimum width */
+}
+
 footer {
     background-color: #aaaeaf; /* Light grey background */
-    color: #fff; /* Black text */
+    color: #fff; /* White text */
     padding: 10px 0;
     text-align: center;
 }
-
-
 
