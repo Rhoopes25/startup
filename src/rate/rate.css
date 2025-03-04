@@ -81,3 +81,33 @@ main {
 .custom-btn:hover {
     background-color: #ff1493; /* Darker pink on hover */
 }
+
+.toggle-ratings-btn {
+    position: absolute;
+    top: 60px; /* Adjusted to be lower than the header */
+    left: 10px;
+}
+
+.clear-ratings-btn {
+    margin-top: 10px;
+    padding: 4px 8px;
+    font-size: 12px;
+    min-width: 80px;
+}
+
+.past-ratings {
+    margin-top: 20px;
+}
+
+.ratings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Reduced gap for more compact layout */
+}
+
+.rating-item {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5px; /* Reduced padding for more compact layout */
+    border-radius: 8px;
+    text-align: center;
+}
