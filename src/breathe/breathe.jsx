@@ -1,13 +1,22 @@
 import React from 'react';
 import './breathe.css';
 
-
 export function Breathe() {
+  const [quote, setQuote] = React.useState('Show me the code');
+  const [quoteAuthor, setQuoteAuthor] = React.useState('Linus Torvalds');
+
+  React.useEffect(() => {
+    setQuote('Inhale the future, exhale the past.');
+    setQuoteAuthor('Samantha Chase');
+  }, []);
+
   return (
     <main className="d-flex flex-column justify-content-center align-items-center text-center flex-grow-1">
       <section className="bg-overlay">
+        <h2 className='quote'>{quote}</h2>
+        <p className='author'>{quoteAuthor}</p>
         <h2>Box Breathing Method</h2>
-        <h3>What is Box Breathing?</h3>
+  
         <p>
           Box breathing is a simple and effective breathing technique designed to promote calmness and reduce stress.
           It's called "box breathing" because you breathe in a rhythmic pattern of four equal steps—inhale, hold, exhale, 
@@ -40,4 +49,5 @@ export function Breathe() {
     </main>
   );
 }
+
 
