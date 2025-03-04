@@ -32,7 +32,7 @@ I am going to use the required technologies in the following ways.
 
 - __WebSocket Data__ - Send daily motivational messages to all logged-in users in real-time. A user logs in, and a real-time notification appears 
 
-- __IP Stack__ -  gather information about users' locations based on their IP addresses 
+- __Quote API__ -  The API provides a random quote or a curated selection based on topics like mindfulness, motivation, or wellness.
 
 
 
