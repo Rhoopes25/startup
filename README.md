@@ -66,3 +66,13 @@ For this deliverable I properly styled the application into its final appearance
 - [x] **Bundled using Vite** - Easy to install and use Vite.
 - [x] **Components** - Easy to bring the code over from HTML and CSS, but had to rework them quite a bit.
 - [x] **Router** - Easy to creating the component routing.
+
+## React Phase 2: Reactivity deliverable
+
+For this phase, I used JavaScript and React to ensure that the application functions smoothly for a single user. I also included placeholders for future enhancements, such as a backend for user authentication and data persistence.
+
+
+- [x] **All functionality implemented or mocked out** - Everything works well! Journal entries are stored in local storage, allowing users to retrieve them when they log in again.
+ 
+- [x] **Hooks** - Used useState to manage journal entry input and user emotions dynamically. Used useEffect to retrieve stored journal entries from localStorage when a user logs in. Each journal entry is saved with a unique key tied to the user’s email.
+If a user logs in with the same email, their previous journal entries automatically load.
