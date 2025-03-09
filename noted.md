@@ -55,3 +55,20 @@ __REACT__ - a JavaScript library used to build user interfaces (UIs) for web and
 
 __JSX__ - JSX is a syntax extension for JavaScript that lets you write HTML-like markup inside a JavaScript file
 
+## commands to reconnect to vs
+
+# makes it so everything on vs takes over git
+
+git remote add origin https://github.com/Rhoopes25/startup.git
+
+rachelhoopes@Rachels-MacBook-Pro-65 startup % git remote -v
+
+git branch --set-upstream-to=origin/main main
+
+git push -u origin main
+
+git push --force origin main
+
+ git fetch --prune
+
+ git reset --hard origin/main
