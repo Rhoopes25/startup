@@ -52,20 +52,20 @@ export function Rate() {
   return (
     <main className="d-flex flex-column justify-content-center align-items-center text-center flex-grow-1">
       <div className="bg-overlay">
-        <button className="custom-btn toggle-emotions-btn" onClick={handleShowPastEmotions}>
+        <button className="custom-btn toggle-ratings-btn" onClick={handleShowPastEmotions}>
           {showPastEmotions ? 'Hide Past Emotions' : 'Show Past Emotions'}
         </button>
 
         {showPastEmotions && (
-          <div className="past-emotions">
+          <div className="past-ratings">
             <h2>Past Emotions</h2>
-            <div className="emotions-list">
+            <div className="ratings-list">
               {emotions.map((emotion, index) => (
-                <div key={index} className="emotion-item">
-                  <span className="emotion-date">
+                <div key={index} className="rating-item">
+                  <span className="rating-date">
                     📅 {new Date(emotion.date).toLocaleDateString()} - {emotion.emotion}
                   </span>
-                  <button className="clear-emotion-btn" onClick={() => handleDeleteEmotion(emotion.date)}>
+                  <button className="custom-btn clear-ratings-btn" onClick={() => handleDeleteEmotion(emotion.date)}>
                     Clear
                   </button>
                 </div>
