@@ -10,7 +10,7 @@ const authCookieName = 'token';
 let users = [];
 let ratings = [];  // This will store ratings per user
 
-const port = process.argv.length > 2 ? process.argv[2] : 3000;
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 app.use(express.json());  // Middleware to parse JSON body
 app.use(cookieParser());  // Middleware for parsing cookies
