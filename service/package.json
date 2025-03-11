@@ -11,8 +11,10 @@
   "description": "",
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "bootstrap": "^5.3.3",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
+    "react-bootstrap": "^2.10.9",
     "uuid": "^11.1.0"
   }
 }
