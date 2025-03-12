@@ -2,12 +2,23 @@ import React from 'react';
 import './breathe.css';
 
 export function Breathe() {
-  const [quote, setQuote] = React.useState('Show me the code');
-  const [quoteAuthor, setQuoteAuthor] = React.useState('Linus Torvalds');
+  const [quote, setQuote] = React.useState();
+  const [quoteAuthor, setQuoteAuthor] = React.useState();
 
   React.useEffect(() => {
-    setQuote('Inhale the future, exhale the past.');
-    setQuoteAuthor('Samantha Chase');
+    // Fetch a random quote from the API
+    fetch('https://quote.cs260.click')
+      .then((response) => response.json())
+      .then((data) => {
+        setQuote(data.quote);
+        setQuoteAuthor(data.author);
+      })
+      .catch((error) => {
+        console.error('Error fetching quote:', error);
+        // Fallback quote in case of an error
+        setQuote('Inhale the future, exhale the past.');
+        setQuoteAuthor('Samantha Chase');
+      });
   }, []);
 
   return (
@@ -49,5 +60,3 @@ export function Breathe() {
     </main>
   );
 }
-
-

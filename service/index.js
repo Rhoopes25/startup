@@ -86,7 +86,7 @@ function clearAuthCookie(res, user) {
   res.clearCookie('token');
 }
 
-const port = 4000;
+const port = 3000;
 app.listen(port, function () {
   console.log(`Listening on port ${port}`);
 });
