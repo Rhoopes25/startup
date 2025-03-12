@@ -3,6 +3,9 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const uuid = require('uuid');
 const bcrypt = require('bcryptjs');
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
+app.use(express.static('public'));
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -86,7 +89,6 @@ function clearAuthCookie(res, user) {
   res.clearCookie('token');
 }
 
-const port = 3000;
 app.listen(port, function () {
   console.log(`Listening on port ${port}`);
 });
