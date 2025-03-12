@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './rate.css';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const quotes = {
@@ -16,6 +15,8 @@ export function Rate() {
   const navigate = useNavigate();
   const [emotions, setEmotions] = useState([]);
   const [showPastEmotions, setShowPastEmotions] = useState(false);
+  const [selectedEmotion, setSelectedEmotion] = useState(null); // Track the selected emotion
+  const [showQuote, setShowQuote] = useState(false); // Track whether to show the quote
   const userEmail = localStorage.getItem('email'); // Retrieve user email from localStorage
 
   useEffect(() => {
@@ -32,8 +33,8 @@ export function Rate() {
       const updatedEmotions = [...emotions, newEmotion];
       localStorage.setItem(`emotions_${userEmail}`, JSON.stringify(updatedEmotions)); // Save emotion
       setEmotions(updatedEmotions);
-      alert(quotes[emotion]); // Display the quote
-      navigate('/journal'); // Navigate to the journal page
+      setSelectedEmotion(emotion); // Set the selected emotion
+      setShowQuote(true); // Show the quote
     } catch (error) {
       console.error('Error saving emotion:', error);
     }
@@ -47,6 +48,10 @@ export function Rate() {
     const updatedEmotions = emotions.filter(emotion => emotion.date !== date);
     localStorage.setItem(`emotions_${userEmail}`, JSON.stringify(updatedEmotions));
     setEmotions(updatedEmotions);
+  };
+
+  const handleContinueToJournal = () => {
+    navigate('/journal'); // Navigate to the journal page
   };
 
   return (
@@ -84,6 +89,16 @@ export function Rate() {
           <button className="custom-btn btn-3" onClick={() => handleClick('Anxious')}><span>Anxious</span></button>
           <button className="custom-btn btn-3" onClick={() => handleClick('Calm')}><span>Calm</span></button>
         </div>
+
+        {/* Display the quote and "Continue to Journal" button */}
+        {showQuote && selectedEmotion && (
+          <div className="quote-section">
+            <p className="quote-text">{quotes[selectedEmotion]}</p>
+            <button className="custom-btn btn-3" onClick={handleContinueToJournal}>
+              <span>Continue to Journal</span>
+            </button>
+          </div>
+        )}
       </div>
     </main>
   );
