@@ -3,11 +3,11 @@ import './rate.css';
 import { useNavigate } from 'react-router-dom';
 
 const quotes = {
-  Angry: "It's okay to feel angry. Take a deep breath and let it out.",
-  Sad: "It's alright to feel sad. Remember, it's just a passing emotion.",
-  Happy: "Happiness is a wonderful feeling. Enjoy the moment!",
-  Stressed: "Feeling stressed? Take a break and relax.",
-  Anxious: "Anxiety is tough, but you're tougher. Take it one step at a time.",
+  Angry: "It's okay to feel angry. Give yourself a moment to step away and regain your composure. Take a deep breath, exhale slowly, and allow yourself to cool down.",
+  Sad: "It's okay to feel sad. Consider talking to a trusted friend or writing down your thoughts.",
+  Happy: "That's great! Take a moment to express gratitude and share your happiness with someone.",
+  Stressed: "Break tasks into smaller steps and focus on one thing at a time. You don’t have to do everything at once.",
+  Anxious: "Remind yourself that thoughts are not facts. Try grounding yourself by noticing three things you can see and hear around you.",
   Calm: "Calmness is a gift. Embrace the peace within you."
 };
 
