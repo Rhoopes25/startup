@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
-import { Unauthenticated } from './unauthenticated';
-import { Authenticated } from './authenticated';
-import { AuthState } from './authState';
+
 
 export function Login() {
   const navigate = useNavigate();
@@ -12,7 +9,7 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleGetStarted = async (e) => {
+  const handleGetStarted = (e) => {
     e.preventDefault();
 
     if (!email.includes('@')) {
@@ -25,27 +22,25 @@ export function Login() {
       return;
     }
 
-    try {
-      const response = await axios.post('/api/auth/login', { email, password });
+    // Get stored users from localStorage
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || {};
 
-      if (response.data.success) {
+    if (storedUsers[email]) {
+      // User exists, check password
+      if (storedUsers[email] === password) {
         localStorage.setItem('email', email);
-        localStorage.setItem('token', response.data.token); // Store token instead of password
+        localStorage.setItem('password', password);
         navigate('/rate');
       } else {
         setError('Invalid email or password.');
       }
-    } catch (error) {
-      if (error.response) {
-        // Server responded with a status other than 200 range
-        setError(`Error: ${error.response.data.msg}`);
-      } else if (error.request) {
-        // Request was made but no response received
-        setError('No response from server. Please try again.');
-      } else {
-        // Something else happened
-        setError(`Error: ${error.message}`);
-      }
+    } else {
+      // New user, store credentials
+      storedUsers[email] = password;
+      localStorage.setItem('users', JSON.stringify(storedUsers));
+      localStorage.setItem('email', email);
+      localStorage.setItem('password', password);
+      navigate('/rate');
     }
   };
 
@@ -55,7 +50,7 @@ export function Login() {
         <h1>Welcome to Emotional Check-In</h1>
         <div className="Name">
           <h2>Login</h2>
-          <form onSubmit={handleGetStarted}>
+          <form>
             <div className="input-group">
               <label htmlFor="email">Email: </label>
               <input
@@ -77,7 +72,7 @@ export function Login() {
               />
             </div>
             {error && <p className="text-danger">{error}</p>}
-            <button className="custom-btn btn-3" type="submit">
+            <button className="custom-btn btn-3" onClick={handleGetStarted}>
               <span>Get Started</span>
             </button>
           </form>
