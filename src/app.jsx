@@ -7,34 +7,25 @@ import { Login } from './login/login';
 import { Breathe } from './breathe/breathe';
 import { Rate } from './rate/rate';
 import { Journal } from './journal/journal';
-import { AuthState } from "./login/authState";
 
 function App() {
-  const location = useLocation();
-  const [authState, setAuthState] = useState(AuthState.Unknown);
-  const [userName, setUserName] = useState('');
+  const location = useLocation(); // Get the current location
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     // Check if user is logged in
     const email = localStorage.getItem('email');
-    if (email) {
-      setAuthState(AuthState.Authenticated);
-      setUserName(email);
-    } else {
-      setAuthState(AuthState.Unauthenticated);
+    const password = localStorage.getItem('password');
+    if (email && password) {
+      setIsLoggedIn(true);
     }
   }, []);
-
-  const onAuthChange = (userName, newAuthState) => {
-    setUserName(userName);
-    setAuthState(newAuthState);
-  };
 
   return (
     <div className='body bg-dark text-light'>
       <header>
         <h1>Emotional Check-In</h1>
-        {authState === AuthState.Authenticated && ( // Conditionally render the nav
+        {location.pathname !== '/' && isLoggedIn && ( // Conditionally render the nav
           <nav>
             <NavLink className='nav-link' to='/'>Login Page</NavLink>
             <NavLink className='nav-link' to='/rate'>Log Emotions</NavLink>
@@ -46,17 +37,8 @@ function App() {
 
       <main>
         <Routes>
-          <Route
-            path='/'
-            element={
-              <Login
-                userName={userName}
-                authState={authState}
-                onAuthChange={onAuthChange}
-              />
-            }
-          />
-          {authState === AuthState.Authenticated ? (
+          <Route path='/' element={<Login />} />
+          {isLoggedIn ? (
             <>
               <Route path='/rate' element={<Rate />} />
               <Route path='/journal' element={<Journal />} />
@@ -87,4 +69,8 @@ export default function AppWrapper() {
       <App />
     </BrowserRouter>
   );
+}
+
+function NotFound() {
+  return <main className='container-fluid bg-secondary text-center'>404: Return to sender. Address unknown.</main>;
 }
