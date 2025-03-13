@@ -20,11 +20,23 @@ export function Rate() {
   const userEmail = localStorage.getItem('email'); // Retrieve user email from localStorage
 
   useEffect(() => {
-    // Load saved emotions for the logged-in user
-    if (userEmail) {
-      const savedEmotions = JSON.parse(localStorage.getItem(`emotions_${userEmail}`)) || [];
-      setEmotions(savedEmotions);
-    }
+    const fetchEmotions = async () => {
+      if (userEmail) {
+        try {
+          const response = await fetch(`/api/emotions?email=${userEmail}`);
+          if (response.ok) {
+            const data = await response.json();
+            setEmotions(data);
+          } else {
+            console.error('Failed to fetch emotions');
+          }
+        } catch (error) {
+          console.error('Error fetching emotions:', error);
+        }
+      }
+    };
+  
+    fetchEmotions();
   }, [userEmail]);
 
   const handleClick = async (emotion) => {

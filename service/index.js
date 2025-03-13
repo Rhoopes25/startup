@@ -4,45 +4,48 @@ const cookieParser = require('cookie-parser');
 const uuid = require('uuid');
 const bcrypt = require('bcryptjs');
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
-app.use(express.static('public'));
 
-
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static('public'));
+app.use(bodyParser.json());
 
-app.post('/api/auth', async (req, res) => {
+
+// Create a router for API endpoints
+const apiRouter = express.Router();
+
+// Auth endpoints
+apiRouter.post('/auth', async (req, res) => {
   if (await getUser('email', req.body.email)) {
     res.status(409).send({ msg: 'Existing user' });
   } else {
     const user = await createUser(req.body.email, req.body.password);
     setAuthCookie(res, user);
-
     res.send({ email: user.email });
   }
 });
 
-app.put('/api/auth', async (req, res) => {
+apiRouter.put('/auth', async (req, res) => {
   const user = await getUser('email', req.body.email);
   if (user && (await bcrypt.compare(req.body.password, user.password))) {
     setAuthCookie(res, user);
-
     res.send({ email: user.email });
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
   }
 });
 
-app.delete('/api/auth', async (req, res) => {
+apiRouter.delete('/auth', async (req, res) => {
   const token = req.cookies['token'];
   const user = await getUser('token', token);
   if (user) {
     clearAuthCookie(res, user);
   }
-
   res.send({});
 });
 
-app.get('/api/user/me', async (req, res) => {
+apiRouter.get('/user/me', async (req, res) => {
   const token = req.cookies['token'];
   const user = await getUser('token', token);
   if (user) {
@@ -52,18 +55,39 @@ app.get('/api/user/me', async (req, res) => {
   }
 });
 
+app.use('/api', apiRouter);
+
+// User management functions
 const users = [];
+let ratings = [];
+
+// GET emotions for a user
+app.get('/api/emotions', (req, res) => {
+  const { email } = req.query;
+  const userEmotions = emotions.filter(e => e.email === email);
+  res.json(userEmotions);
+});
+
+// POST a new emotion
+app.post('/api/emotions', (req, res) => {
+  const newEmotion = req.body;
+  emotions.push(newEmotion);
+  res.status(201).json(newEmotion);
+});
+
+app.delete('/api/emotions', (req, res) => {
+  const { email, date } = req.query;
+  emotions = emotions.filter(e => e.email !== email || e.date !== date);
+  res.status(204).send();
+});
 
 async function createUser(email, password) {
   const passwordHash = await bcrypt.hash(password, 10);
-
   const user = {
     email: email,
     password: passwordHash,
   };
-
   users.push(user);
-
   return user;
 }
 
@@ -76,7 +100,6 @@ async function getUser(field, value) {
 
 function setAuthCookie(res, user) {
   user.token = uuid.v4();
-
   res.cookie('token', user.token, {
     secure: true,
     httpOnly: true,
@@ -89,6 +112,7 @@ function clearAuthCookie(res, user) {
   res.clearCookie('token');
 }
 
-app.listen(port, function () {
+// Start the server
+app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
