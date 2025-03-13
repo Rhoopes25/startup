@@ -9,8 +9,6 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
-app.use(bodyParser.json());
-
 
 // Create a router for API endpoints
 const apiRouter = express.Router();
@@ -59,28 +57,30 @@ app.use('/api', apiRouter);
 
 // User management functions
 const users = [];
-let ratings = [];
+let emotions = []; 
 
 // GET emotions for a user
-app.get('/api/emotions', (req, res) => {
-  const { email } = req.query;
-  const userEmotions = emotions.filter(e => e.email === email);
-  res.json(userEmotions);
+apiRouter.get('/emotions', (req, res) => {
+  //send emotioins
+  res.send(emotions);
 });
 
 // POST a new emotion
-app.post('/api/emotions', (req, res) => {
+apiRouter.post('/emotions', (req, res) => {
   const newEmotion = req.body;
   emotions.push(newEmotion);
   res.status(201).json(newEmotion);
+  res.send(emotions)
 });
 
-app.delete('/api/emotions', (req, res) => {
+// DELETE an emotion
+apiRouter.delete('/emotions', (req, res) => {
   const { email, date } = req.query;
   emotions = emotions.filter(e => e.email !== email || e.date !== date);
   res.status(204).send();
 });
 
+// Helper functions
 async function createUser(email, password) {
   const passwordHash = await bcrypt.hash(password, 10);
   const user = {

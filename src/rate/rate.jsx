@@ -19,38 +19,56 @@ export function Rate() {
   const [showQuote, setShowQuote] = useState(false); // Track whether to show the quote
   const userEmail = localStorage.getItem('email'); // Retrieve user email from localStorage
 
-  useEffect(() => {
-    const fetchEmotions = async () => {
-      if (userEmail) {
-        try {
-          const response = await fetch(`/api/emotions?email=${userEmail}`);
-          if (response.ok) {
-            const data = await response.json();
-            setEmotions(data);
-          } else {
-            console.error('Failed to fetch emotions');
-          }
-        } catch (error) {
-          console.error('Error fetching emotions:', error);
-        }
-      }
-    };
-  
-    fetchEmotions();
-  }, [userEmail]);
+  React.useEffect(() => {
+    fetch('/api/emotions')
+      .then((response) => response.json())
+      .then((emotions) => {
+        // Set all emotions directly in the state
+        setEmotions(emotions);
+      })
+      .catch((error) => {
+        console.error('Error fetching emotions:', error);
+      });
+  }, []);
+  // useEffect(() => {
+  //   // Load saved emotions for the logged-in user
+  //   if (userEmail) {
+  //     const savedEmotions = JSON.parse(localStorage.getItem(`emotions_${userEmail}`)) || [];
+  //     setEmotions(savedEmotions);
+  //   }
+  // }, [userEmail]);
 
-  const handleClick = async (emotion) => {
+  // const handleClick = async (emotion) => {
+  //   try {
+  //     const newEmotion = { email: userEmail, emotion, date: new Date().toISOString() };
+  //     const updatedEmotions = [...emotions, newEmotion];
+  //     localStorage.setItem(`emotions_${userEmail}`, JSON.stringify(updatedEmotions)); // Save emotion
+  //     setEmotions(updatedEmotions);
+  //     setSelectedEmotion(emotion); // Set the selected emotion
+  //     setShowQuote(true); // Show the quote
+  //   } catch (error) {
+  //     console.error('Error saving emotion:', error);
+  //   }
+  // };
+  const handleClick = async (emotion) =>{
     try {
-      const newEmotion = { email: userEmail, emotion, date: new Date().toISOString() };
-      const updatedEmotions = [...emotions, newEmotion];
-      localStorage.setItem(`emotions_${userEmail}`, JSON.stringify(updatedEmotions)); // Save emotion
-      setEmotions(updatedEmotions);
-      setSelectedEmotion(emotion); // Set the selected emotion
-      setShowQuote(true); // Show the quote
-    } catch (error) {
-      console.error('Error saving emotion:', error);
-    }
-  };
+           const newEmotion = { email: userEmail, emotion, date: new Date().toISOString() };
+           const updatedEmotions = [...emotions, newEmotion];   
+           await fetch('/api/emotions', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(updatedEmotions),
+          });
+          setEmotions(updatedEmotions);
+          setSelectedEmotion(emotion); // Set the selected emotion
+          setShowQuote(true); // Show the quote
+             } catch (error) {
+               console.error('Error saving emotion:', error);
+             }
+           };   
+
+
+  
 
   const handleShowPastEmotions = () => {
     setShowPastEmotions(!showPastEmotions);
