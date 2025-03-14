@@ -7,7 +7,8 @@ export function Breathe() {
 
   React.useEffect(() => {
     // Fetch a random quote from the API
-    fetch('https://quote.cs260.click')
+    // fetch('https://quote.cs260.click')
+      fetch('https://zenquotes.io/api/random')
       .then((response) => response.json())
       .then((data) => {
         setQuote(data.quote);

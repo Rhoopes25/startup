@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+//import { Unauthenticated } from './unauthenticated';
+//import { Authenticated } from './authenticated';
+//import { AuthState } from './authState';
 
 export function Login() {
   const navigate = useNavigate();
@@ -7,50 +10,39 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = async () => {
-    if (!validateInputs()) return;
+  const handleGetStarted = (e) => {
+    e.preventDefault();
 
-    const res = await fetch('/api/auth', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (res.ok) {
-      navigate('/rate');
-    } else {
-      setError('Invalid email or password.');
-    }
-  };
-
-  const handleRegister = async () => {
-    if (!validateInputs()) return;
-
-    const res = await fetch('/api/auth', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (res.ok) {
-      navigate('/rate');
-    } else {
-      setError('Registration failed. Please try again.');
-    }
-  };
-
-  const validateInputs = () => {
     if (!email.includes('@')) {
       setError('Please enter a valid email address.');
-      return false;
+      return;
     }
 
     if (password.length === 0) {
       setError('Please enter a password.');
-      return false;
+      return;
     }
 
-    return true;
+    // Get stored users from localStorage
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || {};
+
+    if (storedUsers[email]) {
+      // User exists, check password
+      if (storedUsers[email] === password) {
+        localStorage.setItem('email', email);
+        localStorage.setItem('password', password);
+        navigate('/rate');
+      } else {
+        setError('Invalid email or password.');
+      }
+    } else {
+      // New user, store credentials
+      storedUsers[email] = password;
+      localStorage.setItem('users', JSON.stringify(storedUsers));
+      localStorage.setItem('email', email);
+      localStorage.setItem('password', password);
+      navigate('/rate');
+    }
   };
 
   return (
@@ -68,7 +60,6 @@ export function Login() {
                 name="varEmail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </div>
             <div className="input-group">
@@ -79,25 +70,11 @@ export function Login() {
                 name="varPassword"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
               />
             </div>
             {error && <p className="text-danger">{error}</p>}
-            <button
-              type="button"
-              className="custom-btn btn-3"
-              onClick={handleLogin}
-              disabled={!(email && password)}
-            >
-              <span>Login</span>
-            </button>
-            <button
-              type="button"
-              className="custom-btn btn-3"
-              onClick={handleRegister}
-              disabled={!(email && password)}
-            >
-              <span>Register</span>
+            <button className="custom-btn btn-3" onClick={handleGetStarted}>
+              <span>Get Started</span>
             </button>
           </form>
         </div>
