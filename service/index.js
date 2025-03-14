@@ -93,6 +93,7 @@ apiRouter.get('/journals', (req, res) => {
   res.send(userJournals);
 });
 
+
 // DELETE a journal
 apiRouter.delete('/journals', (req, res) => {
   const { email, date } = req.body;
