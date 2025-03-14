@@ -53,31 +53,51 @@ apiRouter.get('/user/me', async (req, res) => {
   }
 });
 
-app.use('/api', apiRouter);
-
 // User management functions
 const users = [];
-let emotions = []; 
-
-// GET emotions for a user
-apiRouter.get('/emotions', (req, res) => {
-  //send emotioins
-  res.send(emotions);
-});
+let emotions = [];
+let journals = [];
 
 // POST a new emotion
 apiRouter.post('/emotions', (req, res) => {
   const newEmotion = req.body;
   emotions.push(newEmotion);
   res.status(201).json(newEmotion);
-  res.send(emotions)
+});
+
+// GET emotions for a user
+apiRouter.get('/emotions', (req, res) => {
+  const userEmail = req.query.email; // Filter by user email
+  const userEmotions = emotions.filter(e => e.email === userEmail);
+  res.send(userEmotions);
 });
 
 // DELETE an emotion
 apiRouter.delete('/emotions', (req, res) => {
-  const { email, date } = req.query;
+  const { email, date } = req.body;
   emotions = emotions.filter(e => e.email !== email || e.date !== date);
-  res.status(204).send();
+  res.status(204).end();
+});
+
+// POST a new journal
+apiRouter.post('/journals', (req, res) => {
+  const newJournal = req.body;
+  journals.push(newJournal);
+  res.status(201).json(newJournal);
+});
+
+// GET journals for a user
+apiRouter.get('/journals', (req, res) => {
+  const userEmail = req.query.email; // Filter by user email
+  const userJournals = journals.filter(j => j.email === userEmail);
+  res.send(userJournals);
+});
+
+// DELETE a journal
+apiRouter.delete('/journals', (req, res) => {
+  const { email, date } = req.body;
+  journals = journals.filter(j => j.email !== email || j.date !== date);
+  res.status(204).end();
 });
 
 // Helper functions
@@ -113,6 +133,7 @@ function clearAuthCookie(res, user) {
 }
 
 // Start the server
+app.use('/api', apiRouter);
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });

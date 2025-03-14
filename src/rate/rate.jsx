@@ -30,43 +30,28 @@ export function Rate() {
         console.error('Error fetching emotions:', error);
       });
   }, []);
-  // useEffect(() => {
-  //   // Load saved emotions for the logged-in user
-  //   if (userEmail) {
-  //     const savedEmotions = JSON.parse(localStorage.getItem(`emotions_${userEmail}`)) || [];
-  //     setEmotions(savedEmotions);
-  //   }
-  // }, [userEmail]);
-
-  // const handleClick = async (emotion) => {
-  //   try {
-  //     const newEmotion = { email: userEmail, emotion, date: new Date().toISOString() };
-  //     const updatedEmotions = [...emotions, newEmotion];
-  //     localStorage.setItem(`emotions_${userEmail}`, JSON.stringify(updatedEmotions)); // Save emotion
-  //     setEmotions(updatedEmotions);
-  //     setSelectedEmotion(emotion); // Set the selected emotion
-  //     setShowQuote(true); // Show the quote
-  //   } catch (error) {
-  //     console.error('Error saving emotion:', error);
-  //   }
-  // };
-  const handleClick = async (emotion) =>{
+  
+  const handleClick = async (emotion) => {
     try {
-           const newEmotion = { email: userEmail, emotion, date: new Date().toISOString() };
-           const updatedEmotions = [...emotions, newEmotion];   
-           await fetch('/api/emotions', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(updatedEmotions),
-          });
-          setEmotions(updatedEmotions);
-          setSelectedEmotion(emotion); // Set the selected emotion
-          setShowQuote(true); // Show the quote
-             } catch (error) {
-               console.error('Error saving emotion:', error);
-             }
-           };   
-
+      const newEmotion = { email: userEmail, emotion, date: new Date().toISOString() };
+      
+      // Save the new emotion to the server
+      await fetch('/api/emotions', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(newEmotion),
+      });
+  
+      // Update the local state with the new emotion
+      setEmotions([...emotions, newEmotion]);
+      
+      // Set the selected emotion and show the quote
+      setSelectedEmotion(emotion);
+      setShowQuote(true);
+    } catch (error) {
+      console.error('Error saving emotion:', error);
+    }
+  };  
 
   
 
@@ -74,12 +59,24 @@ export function Rate() {
     setShowPastEmotions(!showPastEmotions);
   };
 
-  const handleDeleteEmotion = (date) => {
-    const updatedEmotions = emotions.filter(emotion => emotion.date !== date);
-    localStorage.setItem(`emotions_${userEmail}`, JSON.stringify(updatedEmotions));
-    setEmotions(updatedEmotions);
+  const handleDeleteEmotion = async (date) => {
+    try {
+      // Filter out the emotion that matches the email and date
+      const updatedEmotions = emotions.filter(emotion => emotion.email !== userEmail || emotion.date !== date);
+  
+      // Update the server
+      await fetch('/api/emotions', {
+        method: 'DELETE',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email: userEmail, date }),
+      });
+  
+      // Update the local state
+      setEmotions(updatedEmotions);
+    } catch (error) {
+      console.error('Error deleting emotion:', error);
+    }
   };
-
   const handleContinueToJournal = () => {
     navigate('/journal'); // Navigate to the journal page
   };
@@ -95,20 +92,19 @@ export function Rate() {
           <div className="past-ratings">
             <h2>Past Emotions</h2>
             <div className="ratings-list">
-              {emotions.map((emotion, index) => (
-                <div key={index} className="rating-item">
-                  <span className="rating-date">
-                    📅 {new Date(emotion.date).toLocaleDateString()} - {emotion.emotion}
-                  </span>
-                  <button className="custom-btn clear-ratings-btn" onClick={() => handleDeleteEmotion(emotion.date)}>
-                    Clear
-                  </button>
-                </div>
-              ))}
+            {emotions.map((emotion, index) => (
+              <div key={index} className="rating-item">
+                <span className="rating-date">
+                  📅 {new Date(emotion.date).toLocaleDateString()} - {emotion.emotion}
+                </span>
+                <button className="custom-btn clear-ratings-btn" onClick={() => handleDeleteEmotion(emotion.date)}>
+                  Clear
+                </button>
+              </div>
+            ))}
             </div>
           </div>
-        )}
-
+          )}
         <h2>How are you feeling?</h2>
         <p>Track your emotions and check in with yourself regularly for better well-being.</p>
         <div className="button-group">

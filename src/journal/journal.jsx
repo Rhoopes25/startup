@@ -9,23 +9,34 @@ export function Journal() {
   const [showPastJournals, setShowPastJournals] = useState(false);
   const userEmail = localStorage.getItem('email'); // Retrieve user email from localStorage
 
-  useEffect(() => {
-    // Load saved journal entries for the logged-in user
-    if (userEmail) {
-      const savedJournals = JSON.parse(localStorage.getItem(`journals_${userEmail}`)) || [];
-      setPastJournals(savedJournals);
-    }
-  }, [userEmail]);
+  React.useEffect(() => {
+    fetch('/api/journals')
+      .then((response) => response.json())
+      .then((journals) => {
+        // Set all emotions directly in the state
+        setpastJournals(journals);
+      })
+      .catch((error) => {
+        console.error('Error fetching journals:', error);
+      });
+  }, []);
 
-  const handleSave = () => {
-    if (userEmail) {
+
+  const handleSave = async() => {
+    try {
       const newJournal = { entry: journalEntry, date: new Date().toISOString() };
+      await fetch('/api/journals', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(newJournal),
+      });
       const updatedJournals = [...pastJournals, newJournal];
-      localStorage.setItem(`journals_${userEmail}`, JSON.stringify(updatedJournals)); // Save entry
       setPastJournals(updatedJournals);
-      setJournalEntry(''); // Clear the text area
+      setJournalEntry('');
+      navigate('/breathe');
+    } catch(error){
+      console.error('Error saving journal:', error);
     }
-    navigate('/breathe'); // Navigate to the 'breathe' page
   };
 
   const handleShowPastJournals = () => {
@@ -86,4 +97,3 @@ export function Journal() {
     </main>
   );
 }
-
