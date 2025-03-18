@@ -83,7 +83,7 @@ For this deliverable I added backend endpoints that receives votes and returns t
 
 - [x] **Node.js/Express HTTP service** - Implemented successfully!
 - [x] **Static middleware for frontend** - Set up and working!
-- [ ] **Calls to third party endpoints** - Using quote fetcher on breathe page
+- [x] **Calls to third party endpoints** - Using quote fetcher on breathe page
 - [x] **Backend service endpoints** - Added placeholders for login functionality, storing the current user on the server, along with endpoints for voting.
 - [x] **Frontend calls service endpoints** - I did this using the fetch function.
 - [ ] **User Authentication Features – Supports login on the frontend, but registration, logout, and restricted endpoints are not fully implemented on the backend yet.
