@@ -9,35 +9,40 @@ export function Journal() {
   const [showPastJournals, setShowPastJournals] = useState(false);
   const userEmail = localStorage.getItem('email'); // Retrieve user email from localStorage
 
-  React.useEffect(() => {
-    fetch('/api/journals')
-      .then((response) => response.json())
-      .then((journals) => {
-        // Set all emotions directly in the state
-        setpastJournals(journals);
-      })
-      .catch((error) => {
-        console.error('Error fetching journals:', error);
-      });
-  }, []);
+  // Fix in your useEffect to fetch journals
+React.useEffect(() => {
+  // Make sure to include the email parameter in the URL
+  fetch(`/api/journals?email=${userEmail}`)
+    .then((response) => response.json())
+    .then((journals) => {
+      setPastJournals(journals);
+    })
+    .catch((error) => {
+      console.error('Error fetching journals:', error);
+    });
+}, [userEmail]); // Add userEmail as a dependency
 
-
-  const handleSave = async() => {
-    try {
-      const newJournal = { entry: journalEntry, date: new Date().toISOString() };
-      await fetch('/api/journals', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(newJournal),
-      });
-      const updatedJournals = [...pastJournals, newJournal];
-      setPastJournals(updatedJournals);
-      setJournalEntry('');
-      navigate('/breathe');
-    } catch(error){
-      console.error('Error saving journal:', error);
-    }
-  };
+// Fix in your handleSave function to include email
+const handleSave = async() => {
+  try {
+    const newJournal = { 
+      email: userEmail, 
+      entry: journalEntry, 
+      date: new Date().toISOString() 
+    };
+    await fetch('/api/journals', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(newJournal),
+    });
+    const updatedJournals = [...pastJournals, newJournal];
+    setPastJournals(updatedJournals);
+    setJournalEntry('');
+    navigate('/breathe');
+  } catch(error){
+    console.error('Error saving journal:', error);
+  }
+};
 
   const handleShowPastJournals = () => {
     setShowPastJournals(!showPastJournals);
@@ -47,11 +52,22 @@ export function Journal() {
     setJournalEntry(journal.entry);
   };
 
-  const handleClearJournal = (date) => {
-    const updatedJournals = pastJournals.filter(journal => journal.date !== date);
-    localStorage.setItem(`journals_${userEmail}`, JSON.stringify(updatedJournals));
-    setPastJournals(updatedJournals);
-    setJournalEntry(''); // Clear the text area if the current entry is deleted
+  const handleClearJournal = async (date) => {
+    try {
+      // Update the server
+      await fetch('/api/journals', {
+        method: 'DELETE',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email: userEmail, date }),
+      });
+      
+      // Update the local state
+      const updatedJournals = pastJournals.filter(journal => journal.date !== date);
+      setPastJournals(updatedJournals);
+      setJournalEntry(''); // Clear the text area if the current entry is deleted
+    } catch (error) {
+      console.error('Error deleting journal:', error);
+    }
   };
 
   return (

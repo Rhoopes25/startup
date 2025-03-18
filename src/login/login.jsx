@@ -9,35 +9,40 @@ export function Login() {
 
   const handleLogin = async () => {
     if (!validateInputs()) return;
-
-    const res = await fetch('/api/auth', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (res.ok) {
-      navigate('/rate');
-    } else {
-      setError('Invalid email or password.');
-    }
+  
+  const res = await fetch('/api/auth', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  
+  if (res.ok) {
+    // Save email to localStorage
+    localStorage.setItem('email', email);
+    navigate('/rate');
+  } else {
+    setError('Invalid email or password.');
+  }
   };
-
+  
   const handleRegister = async () => {
     if (!validateInputs()) return;
+  
+  const res = await fetch('/api/auth', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
 
-    const res = await fetch('/api/auth', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (res.ok) {
-      navigate('/rate');
-    } else {
-      setError('Registration failed. Please try again.');
-    }
-  };
+  if (res.ok) {
+    // Save email to localStorage
+    localStorage.setItem('email', email);
+    navigate('/rate');
+  } else {
+    setError('Registration failed. Please try again.');
+  }
+};
+  
 
   const validateInputs = () => {
     if (!email.includes('@')) {

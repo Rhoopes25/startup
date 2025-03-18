@@ -20,16 +20,15 @@ export function Rate() {
   const userEmail = localStorage.getItem('email'); // Retrieve user email from localStorage
 
   React.useEffect(() => {
-    fetch('/api/emotions')
+    fetch(`/api/emotions?email=${userEmail}`)
       .then((response) => response.json())
       .then((emotions) => {
-        // Set all emotions directly in the state
         setEmotions(emotions);
       })
       .catch((error) => {
         console.error('Error fetching emotions:', error);
       });
-  }, []);
+  }, [userEmail]);
   
   const handleClick = async (emotion) => {
     try {
