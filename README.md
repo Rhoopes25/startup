@@ -76,3 +76,14 @@ For this phase, I used JavaScript and React to ensure that the application funct
  
 - [x] **Hooks** - Used useState to manage journal entry input and user emotions dynamically. Used useEffect to retrieve stored journal entries from localStorage when a user logs in. Each journal entry is saved with a unique key tied to the user’s email.
 If a user logs in with the same email, their previous journal entries automatically load.
+
+## Service deliverable
+
+For this deliverable I added backend endpoints that receives votes and returns the voting totals.
+
+- [x] **Node.js/Express HTTP service** - Implemented successfully!
+- [x] **Static middleware for frontend** - Set up and working!
+- [ ] **Calls to third party endpoints** - Using quote fetcher on breathe page
+- [x] **Backend service endpoints** - Added placeholders for login functionality, storing the current user on the server, along with endpoints for voting.
+- [x] **Frontend calls service endpoints** - I did this using the fetch function.
+- [ ] **User Authentication Features – Supports login on the frontend, but registration, logout, and restricted endpoints are not fully implemented on the backend yet.
