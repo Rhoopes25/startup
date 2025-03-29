@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function Login() {
@@ -7,6 +7,17 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  // Check if user is already logged in
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('email');
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    
+    // Only redirect if explicitly logged in
+    if (storedEmail && isLoggedIn) {
+      navigate('/rate');
+    }
+  }, [navigate]);
+
   const handleLogin = async () => {
     if (!validateInputs()) return;
   
@@ -14,17 +25,19 @@ export function Login() {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
-      credentials: 'include'  // Add this line
+      credentials: 'include'
     });
-    
   
-  if (res.ok) {
-    // Save email to localStorage
-    localStorage.setItem('email', email);
-    navigate('/rate');
-  } else {
-    setError('Invalid email or password.');
-  }
+    if (res.ok) {
+      // Save email to localStorage
+      localStorage.setItem('email', email);
+      // Set isLoggedIn flag
+      localStorage.setItem('isLoggedIn', 'true');
+      // Navigate to rate page
+      navigate('/rate');
+    } else {
+      setError('Invalid email or password.');
+    }
   };
   
   const handleRegister = async () => {
@@ -34,19 +47,21 @@ export function Login() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
-      credentials: 'include'  // Add this line
+      credentials: 'include'
     });
 
-  if (res.ok) {
-    // Save email to localStorage
-    localStorage.setItem('email', email);
-    navigate('/rate');
-  } else {
-    setError('Registration failed. Please try again.');
-  }
-};
+    if (res.ok) {
+      // Save email to localStorage
+      localStorage.setItem('email', email);
+      // Set isLoggedIn flag
+      localStorage.setItem('isLoggedIn', 'true');
+      // Navigate to rate page
+      navigate('/rate');
+    } else {
+      setError('Registration failed. Please try again.');
+    }
+  };
   
-
   const validateInputs = () => {
     if (!email.includes('@')) {
       setError('Please enter a valid email address.');
@@ -67,7 +82,7 @@ export function Login() {
         <h1>Welcome to Emotional Check-In</h1>
         <div className="Name">
           <h2>Login</h2>
-          <form>
+          <form onSubmit={(e) => e.preventDefault()}>
             <div className="input-group">
               <label htmlFor="email">Email: </label>
               <input
