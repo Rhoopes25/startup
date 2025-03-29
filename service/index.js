@@ -124,7 +124,8 @@ function setAuthCookie(res, user) {
   res.cookie('token', user.token, {
     secure: true,
     httpOnly: true,
-    sameSite: 'strict',
+    sameSite: 'lax',  
+    path: '/',  
   });
 }
 
