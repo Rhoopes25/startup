@@ -3,8 +3,10 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const uuid = require('uuid');
 const bcrypt = require('bcryptjs');
-const db = require('./database.js');
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
+
+// Import the database module
+const db = require('./database');
 
 // Middleware
 app.use(express.json());
@@ -26,8 +28,8 @@ apiRouter.post('/auth', async (req, res) => {
       res.send({ email: user.email });
     }
   } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).send({ msg: 'Error creating user' });
+    console.error('Error during registration:', error);
+    res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
@@ -35,28 +37,33 @@ apiRouter.put('/auth', async (req, res) => {
   try {
     const user = await db.getUser('email', req.body.email);
     if (user && (await bcrypt.compare(req.body.password, user.password))) {
-      setAuthCookie(res, user);
+      const token = uuid.v4();
+      await db.updateUserToken(user.email, token);
+      setAuthCookie(res, { ...user, token });
       res.send({ email: user.email });
     } else {
       res.status(401).send({ msg: 'Unauthorized' });
     }
   } catch (error) {
-    console.error('Error authenticating:', error);
-    res.status(500).send({ msg: 'Error authenticating' });
+    console.error('Error during login:', error);
+    res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
 apiRouter.delete('/auth', async (req, res) => {
   try {
     const token = req.cookies['token'];
-    const user = await db.getUser('token', token);
-    if (user) {
-      await clearAuthCookie(res, user);
+    if (token) {
+      const user = await db.getUser('token', token);
+      if (user) {
+        await db.removeUserToken(user.email);
+      }
     }
+    res.clearCookie('token');
     res.send({});
   } catch (error) {
-    console.error('Error logging out:', error);
-    res.status(500).send({ msg: 'Error logging out' });
+    console.error('Error during logout:', error);
+    res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
@@ -70,110 +77,134 @@ apiRouter.get('/user/me', async (req, res) => {
       res.status(401).send({ msg: 'Unauthorized' });
     }
   } catch (error) {
-    console.error('Error getting user:', error);
-    res.status(500).send({ msg: 'Error getting user' });
+    console.error('Error getting user profile:', error);
+    res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
-// Emotions endpoints
+// POST a new emotion
 apiRouter.post('/emotions', async (req, res) => {
   try {
+    const token = req.cookies['token'];
+    const user = await db.getUser('token', token);
+    if (!user) {
+      return res.status(401).send({ msg: 'Unauthorized' });
+    }
+    
     const newEmotion = req.body;
-    // Allow the emotion to be saved without token validation
-    // This matches your current frontend implementation using localStorage
-    await db.addEmotion(newEmotion);
-    res.status(201).json(newEmotion);
+    newEmotion.email = user.email; // Ensure the email is from the authenticated user
+    
+    const savedEmotion = await db.addEmotion(newEmotion);
+    res.status(201).json(savedEmotion);
   } catch (error) {
     console.error('Error adding emotion:', error);
-    res.status(500).send({ msg: 'Error adding emotion' });
+    res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
+// GET emotions for a user
 apiRouter.get('/emotions', async (req, res) => {
   try {
-    const userEmail = req.query.email;
-    // Allow getting emotions without token validation
-    // This matches your current frontend implementation using localStorage
-    if (!userEmail) {
-      return res.status(400).send({ msg: 'Email parameter is required' });
+    const token = req.cookies['token'];
+    const user = await db.getUser('token', token);
+    if (!user) {
+      return res.status(401).send({ msg: 'Unauthorized' });
     }
-    const userEmotions = await db.getEmotions(userEmail);
-    res.send(userEmotions);
+    
+    const emotions = await db.getEmotions(user.email);
+    res.send(emotions);
   } catch (error) {
     console.error('Error getting emotions:', error);
-    res.status(500).send({ msg: 'Error getting emotions' });
+    res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
+// DELETE an emotion
 apiRouter.delete('/emotions', async (req, res) => {
   try {
-    const { email, date } = req.body;
-    // Allow deleting emotions without token validation
-    // This matches your current frontend implementation using localStorage
-    if (!email || !date) {
-      return res.status(400).send({ msg: 'Email and date are required' });
+    const token = req.cookies['token'];
+    const user = await db.getUser('token', token);
+    if (!user) {
+      return res.status(401).send({ msg: 'Unauthorized' });
     }
     
-    await db.deleteEmotion(email, date);
-    res.status(204).end();
+    const { date } = req.body;
+    const success = await db.deleteEmotion(user.email, date);
+    
+    if (success) {
+      res.status(204).end();
+    } else {
+      res.status(404).send({ msg: 'Emotion not found' });
+    }
   } catch (error) {
     console.error('Error deleting emotion:', error);
-    res.status(500).send({ msg: 'Error deleting emotion' });
+    res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
-// Journals endpoints
+// POST a new journal
 apiRouter.post('/journals', async (req, res) => {
   try {
-    const newJournal = req.body;
-    // Allow the journal to be saved without token validation
-    // This matches your current frontend implementation using localStorage
-    await db.addJournal(newJournal);
-    res.status(201).json(newJournal);
-  } catch (error) {
-    console.error('Error adding journal:', error);
-    res.status(500).send({ msg: 'Error adding journal' });
-  }
-});
-
-apiRouter.get('/journals', async (req, res) => {
-  try {
-    const userEmail = req.query.email;
-    // Allow getting journals without token validation
-    // This matches your current frontend implementation using localStorage
-    if (!userEmail) {
-      return res.status(400).send({ msg: 'Email parameter is required' });
-    }
-    const userJournals = await db.getJournals(userEmail);
-    res.send(userJournals);
-  } catch (error) {
-    console.error('Error getting journals:', error);
-    res.status(500).send({ msg: 'Error getting journals' });
-  }
-});
-
-apiRouter.delete('/journals', async (req, res) => {
-  try {
-    const { email, date } = req.body;
-    // Allow deleting journals without token validation
-    // This matches your current frontend implementation using localStorage
-    if (!email || !date) {
-      return res.status(400).send({ msg: 'Email and date are required' });
+    const token = req.cookies['token'];
+    const user = await db.getUser('token', token);
+    if (!user) {
+      return res.status(401).send({ msg: 'Unauthorized' });
     }
     
-    await db.deleteJournal(email, date);
-    res.status(204).end();
+    const newJournal = req.body;
+    newJournal.email = user.email; // Ensure the email is from the authenticated user
+    
+    const savedJournal = await db.addJournal(newJournal);
+    res.status(201).json(savedJournal);
   } catch (error) {
-    console.error('Error deleting journal:', error);
-    res.status(500).send({ msg: 'Error deleting journal' });
+    console.error('Error adding journal:', error);
+    res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
-// Helper functions
-async function setAuthCookie(res, user) {
-  const token = uuid.v4();
-  await db.updateUserToken(user.email, token);
-  res.cookie('token', token, {
+// GET journals for a user
+apiRouter.get('/journals', async (req, res) => {
+  try {
+    const token = req.cookies['token'];
+    const user = await db.getUser('token', token);
+    if (!user) {
+      return res.status(401).send({ msg: 'Unauthorized' });
+    }
+    
+    const journals = await db.getJournals(user.email);
+    res.send(journals);
+  } catch (error) {
+    console.error('Error getting journals:', error);
+    res.status(500).send({ msg: 'Internal server error' });
+  }
+});
+
+// DELETE a journal
+apiRouter.delete('/journals', async (req, res) => {
+  try {
+    const token = req.cookies['token'];
+    const user = await db.getUser('token', token);
+    if (!user) {
+      return res.status(401).send({ msg: 'Unauthorized' });
+    }
+    
+    const { date } = req.body;
+    const success = await db.deleteJournal(user.email, date);
+    
+    if (success) {
+      res.status(204).end();
+    } else {
+      res.status(404).send({ msg: 'Journal not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting journal:', error);
+    res.status(500).send({ msg: 'Internal server error' });
+  }
+});
+
+// Helper function for setting auth cookie
+function setAuthCookie(res, user) {
+  res.cookie('token', user.token, {
     secure: true,
     httpOnly: true,
     sameSite: 'lax',
@@ -181,13 +212,9 @@ async function setAuthCookie(res, user) {
   });
 }
 
-async function clearAuthCookie(res, user) {
-  await db.removeUserToken(user.email);
-  res.clearCookie('token');
-}
-
 // Start the server
 app.use('/api', apiRouter);
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });

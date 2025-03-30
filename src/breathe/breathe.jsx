@@ -2,17 +2,22 @@ import React from 'react';
 import './breathe.css';
 
 export function Breathe() {
-  const [quote, setQuote] = React.useState();
-  const [quoteAuthor, setQuoteAuthor] = React.useState();
+  const [quote, setQuote] = React.useState('');
+  const [quoteAuthor, setQuoteAuthor] = React.useState('');
 
   React.useEffect(() => {
     // Fetch a random quote from the API
-    // fetch('https://quote.cs260.click')
-      fetch('https://zenquotes.io/api/random')
+    fetch('https://zenquotes.io/api/random')
       .then((response) => response.json())
       .then((data) => {
-        setQuote(data.quote);
-        setQuoteAuthor(data.author);
+        // ZenQuotes returns an array with the first item containing the quote
+        if (Array.isArray(data) && data.length > 0) {
+          setQuote(data[0].q);  // 'q' is the quote text
+          setQuoteAuthor(data[0].a);  // 'a' is the author
+        } else {
+          // Fallback if the response format is unexpected
+          throw new Error('Unexpected response format');
+        }
       })
       .catch((error) => {
         console.error('Error fetching quote:', error);
@@ -32,7 +37,7 @@ export function Breathe() {
         <p>
           Box breathing is a simple and effective breathing technique designed to promote calmness and reduce stress.
           It's called "box breathing" because you breathe in a rhythmic pattern of four equal steps—inhale, hold, exhale, 
-          and hold again. Each step takes a count of four seconds, creating a “box” pattern.
+          and hold again. Each step takes a count of four seconds, creating a "box" pattern.
         </p>
         <section className="bg-overlay pink-box">
           <h3>How to Practice Box Breathing:</h3>
