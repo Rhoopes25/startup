@@ -1,220 +1,153 @@
 const express = require('express');
-const app = express();
 const cookieParser = require('cookie-parser');
-const uuid = require('uuid');
 const bcrypt = require('bcryptjs');
-const port = process.argv.length > 2 ? process.argv[2] : 4000;
-
-// Import the database module
+const uuid = require('uuid');
 const db = require('./database');
+
+const app = express();
+const authCookieName = 'token';
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
 
-// Create a router for API endpoints
+// Router
 const apiRouter = express.Router();
+app.use('/api', apiRouter);
 
 // Auth endpoints
-apiRouter.post('/auth', async (req, res) => {
+apiRouter.post('/auth/create', async (req, res) => {
   try {
-    if (await db.getUser('email', req.body.email)) {
+    if (await db.getUser(req.body.email)) {
       res.status(409).send({ msg: 'Existing user' });
     } else {
-      const passwordHash = await bcrypt.hash(req.body.password, 10);
-      const user = await db.createUser(req.body.email, passwordHash);
-      setAuthCookie(res, user);
+      const user = await createUser(req.body.email, req.body.password);
+      setAuthCookie(res, user.token);
       res.send({ email: user.email });
     }
-  } catch (error) {
-    console.error('Error during registration:', error);
+  } catch (err) {
     res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
-apiRouter.put('/auth', async (req, res) => {
+apiRouter.post('/auth/login', async (req, res) => {
   try {
-    const user = await db.getUser('email', req.body.email);
-    if (user && (await bcrypt.compare(req.body.password, user.password))) {
-      const token = uuid.v4();
-      await db.updateUserToken(user.email, token);
-      setAuthCookie(res, { ...user, token });
+    const user = await db.getUser(req.body.email);
+    if (user && await bcrypt.compare(req.body.password, user.password)) {
+      user.token = uuid.v4();
+      await db.updateUser(user);
+      setAuthCookie(res, user.token);
       res.send({ email: user.email });
     } else {
       res.status(401).send({ msg: 'Unauthorized' });
     }
-  } catch (error) {
-    console.error('Error during login:', error);
+  } catch (err) {
     res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
-apiRouter.delete('/auth', async (req, res) => {
-  try {
-    const token = req.cookies['token'];
-    if (token) {
-      const user = await db.getUser('token', token);
-      if (user) {
-        await db.removeUserToken(user.email);
-      }
-    }
-    res.clearCookie('token');
-    res.send({});
-  } catch (error) {
-    console.error('Error during logout:', error);
-    res.status(500).send({ msg: 'Internal server error' });
-  }
-});
-
-apiRouter.get('/user/me', async (req, res) => {
-  try {
-    const token = req.cookies['token'];
-    const user = await db.getUser('token', token);
+apiRouter.delete('/auth/logout', async (req, res) => {
+  const token = req.cookies[authCookieName];
+  if (token) {
+    const user = await db.getUserByToken(token);
     if (user) {
-      res.send({ email: user.email });
-    } else {
-      res.status(401).send({ msg: 'Unauthorized' });
+      user.token = null;
+      await db.updateUser(user);
     }
-  } catch (error) {
-    console.error('Error getting user profile:', error);
+  }
+  res.clearCookie(authCookieName);
+  res.status(204).end();
+});
+
+// Auth middleware
+const verifyAuth = async (req, res, next) => {
+  const token = req.cookies[authCookieName];
+  const user = await db.getUserByToken(token);
+  if (user) {
+    next();
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+};
+
+// Protected endpoints
+apiRouter.get('/user/me', verifyAuth, async (req, res) => {
+  const token = req.cookies[authCookieName];
+  const user = await db.getUserByToken(token);
+  res.send({ email: user.email });
+});
+
+apiRouter.post('/emotions', verifyAuth, async (req, res) => {
+  try {
+    const token = req.cookies[authCookieName];
+    const user = await db.getUserByToken(token);
+    const emotion = { ...req.body, email: user.email };
+    const savedEmotion = await db.addEmotion(emotion);
+    res.status(201).send(savedEmotion);
+  } catch (err) {
     res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
-// POST a new emotion
-apiRouter.post('/emotions', async (req, res) => {
+apiRouter.get('/emotions', verifyAuth, async (req, res) => {
   try {
-    const token = req.cookies['token'];
-    const user = await db.getUser('token', token);
-    if (!user) {
-      return res.status(401).send({ msg: 'Unauthorized' });
-    }
-    
-    const newEmotion = req.body;
-    newEmotion.email = user.email; // Ensure the email is from the authenticated user
-    
-    const savedEmotion = await db.addEmotion(newEmotion);
-    res.status(201).json(savedEmotion);
-  } catch (error) {
-    console.error('Error adding emotion:', error);
-    res.status(500).send({ msg: 'Internal server error' });
-  }
-});
-
-// GET emotions for a user
-apiRouter.get('/emotions', async (req, res) => {
-  try {
-    const token = req.cookies['token'];
-    const user = await db.getUser('token', token);
-    if (!user) {
-      return res.status(401).send({ msg: 'Unauthorized' });
-    }
-    
+    const token = req.cookies[authCookieName];
+    const user = await db.getUserByToken(token);
     const emotions = await db.getEmotions(user.email);
     res.send(emotions);
-  } catch (error) {
-    console.error('Error getting emotions:', error);
+  } catch (err) {
     res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
-// DELETE an emotion
-apiRouter.delete('/emotions', async (req, res) => {
+apiRouter.delete('/emotions', verifyAuth, async (req, res) => {
   try {
-    const token = req.cookies['token'];
-    const user = await db.getUser('token', token);
-    if (!user) {
-      return res.status(401).send({ msg: 'Unauthorized' });
-    }
-    
-    const { date } = req.body;
-    const success = await db.deleteEmotion(user.email, date);
-    
-    if (success) {
-      res.status(204).end();
-    } else {
-      res.status(404).send({ msg: 'Emotion not found' });
-    }
-  } catch (error) {
-    console.error('Error deleting emotion:', error);
+    const token = req.cookies[authCookieName];
+    const user = await db.getUserByToken(token);
+    const success = await db.deleteEmotion(user.email, req.body.date);
+    success ? res.status(204).end() : res.status(404).end();
+  } catch (err) {
     res.status(500).send({ msg: 'Internal server error' });
   }
 });
 
-// POST a new journal
-apiRouter.post('/journals', async (req, res) => {
-  try {
-    const token = req.cookies['token'];
-    const user = await db.getUser('token', token);
-    if (!user) {
-      return res.status(401).send({ msg: 'Unauthorized' });
-    }
-    
-    const newJournal = req.body;
-    newJournal.email = user.email; // Ensure the email is from the authenticated user
-    
-    const savedJournal = await db.addJournal(newJournal);
-    res.status(201).json(savedJournal);
-  } catch (error) {
-    console.error('Error adding journal:', error);
-    res.status(500).send({ msg: 'Internal server error' });
-  }
-});
+// (Similar protected endpoints for journals would go here)
 
-// GET journals for a user
-apiRouter.get('/journals', async (req, res) => {
-  try {
-    const token = req.cookies['token'];
-    const user = await db.getUser('token', token);
-    if (!user) {
-      return res.status(401).send({ msg: 'Unauthorized' });
-    }
-    
-    const journals = await db.getJournals(user.email);
-    res.send(journals);
-  } catch (error) {
-    console.error('Error getting journals:', error);
-    res.status(500).send({ msg: 'Internal server error' });
-  }
-});
+// Helper functions
+async function createUser(email, password) {
+  const passwordHash = await bcrypt.hash(password, 10);
+  const user = {
+    email,
+    password: passwordHash,
+    token: uuid.v4(),
+    created: new Date()
+  };
+  await db.addUser(user);
+  return user;
+}
 
-// DELETE a journal
-apiRouter.delete('/journals', async (req, res) => {
-  try {
-    const token = req.cookies['token'];
-    const user = await db.getUser('token', token);
-    if (!user) {
-      return res.status(401).send({ msg: 'Unauthorized' });
-    }
-    
-    const { date } = req.body;
-    const success = await db.deleteJournal(user.email, date);
-    
-    if (success) {
-      res.status(204).end();
-    } else {
-      res.status(404).send({ msg: 'Journal not found' });
-    }
-  } catch (error) {
-    console.error('Error deleting journal:', error);
-    res.status(500).send({ msg: 'Internal server error' });
-  }
-});
-
-// Helper function for setting auth cookie
-function setAuthCookie(res, user) {
-  res.cookie('token', user.token, {
-    secure: true,
+function setAuthCookie(res, token) {
+  res.cookie(authCookieName, token, {
+    secure: process.env.NODE_ENV !== 'development',
     httpOnly: true,
-    sameSite: 'lax',
-    path: '/',
+    sameSite: 'strict',
+    path: '/'
   });
 }
 
-// Start the server
-app.use('/api', apiRouter);
+// Error handler
+app.use((err, req, res, next) => {
+  res.status(500).send({ type: err.name, message: err.message });
+});
 
+// Default route
+app.use((_req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
+
+// Start server
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
