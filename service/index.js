@@ -11,7 +11,7 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static('src'));
+app.use(express.static('public'));
 
 // Router
 const apiRouter = express.Router();
@@ -224,7 +224,7 @@ app.use((err, req, res, next) => {
 
 // Default route
 app.use((_req, res) => {
-  res.sendFile('index.html', { root: '../' });
+  res.sendFile('index.html', { root: './public' });
 });
 
 app.listen(port, () => {
