@@ -21,8 +21,8 @@ export function Login() {
   const handleLogin = async () => {
     if (!validateInputs()) return;
   
-    const res = await fetch('/api/auth', {
-      method: 'PUT',
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
       credentials: 'include'
@@ -43,7 +43,7 @@ export function Login() {
   const handleRegister = async () => {
     if (!validateInputs()) return;
   
-    const res = await fetch('/api/auth', {
+    const res = await fetch('/api/auth/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
