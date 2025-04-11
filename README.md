@@ -87,3 +87,11 @@ For this deliverable I added backend endpoints that receives votes and returns t
 - [x] **Backend service endpoints** - Added placeholders for login functionality, storing the current user on the server, along with endpoints for voting.
 - [x] **Frontend calls service endpoints** - I did this using the fetch function.
 - [ ] **User Authentication Features** – Supports login on the frontend, but registration, logout, and restricted endpoints are not fully implemented on the backend yet.
+
+
+## DB/Login deliverable
+
+For this deliverable I associate the votes with the logged in user. I stored the votes in the database.
+
+- [x] **Stores data in MongoDB** - done!
+- [x] **Use MongoDB to store credentials** - Stores both user and their emotions/journals.
