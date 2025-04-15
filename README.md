@@ -95,3 +95,13 @@ For this deliverable I associate the votes with the logged in user. I stored the
 
 - [x] **Stores data in MongoDB** - done!
 - [x] **Use MongoDB to store credentials** - Stores both user and their emotions/journals.
+
+## WebSocket Add-On: Live Online Users
+
+I just added a WebSocket-powered feature to my site that tracks how many people are currently online — and updates *live* in real time!
+
+- [x] **Backend accepts WebSocket connections** – got it set up and listening!  
+- [x] **Frontend connects via WebSocket** – connection fires up as soon as someone visits.  
+- [x] **Live user count sent over WebSocket** – the server keeps everyone in sync with the current number of online users.  
+- [x] **Frontend displays live count** – you can literally watch the number change as people come and go. It’s awesome.
+
