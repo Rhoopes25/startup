@@ -30,7 +30,7 @@ I am going to use the required technologies in the following ways.
 
 - __Database Data__ - Store data in a database. Emotion ratings and journal entries. 
 
-- __WebSocket Data__ - Send daily motivational messages to all logged-in users in real-time. A user logs in, and a real-time notification appears 
+- __WebSocket Data__ - Show how many users are using the site
 
 - __Quote API__ -  The API provides a random quote or a curated selection based on topics like mindfulness, motivation, or wellness.
 
