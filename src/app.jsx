@@ -7,6 +7,7 @@ import { Login } from './login/login';
 import { Breathe } from './breathe/breathe';
 import { Rate } from './rate/rate';
 import { Journal } from './journal/journal';
+import UserCount from './UserCount'; // Import the new component
 
 function App() {
   const location = useLocation(); // Get the current location
@@ -42,7 +43,11 @@ function App() {
   return (
     <div className='body bg-dark text-light'>
       <header>
-        <h1>Emotional Check-In</h1>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <h1>Emotional Check-In</h1>
+          {/* Add the UserCount component here */}
+          <UserCount />
+        </div>
         {isLoggedIn && ( // Conditionally render the nav
           <nav>
             <NavLink className='nav-link' to='/rate'>Log Emotions</NavLink>
