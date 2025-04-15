@@ -48,7 +48,7 @@ For this deliverable I built out the structure of my application using HTML.
 - [x] **Text** - Each button has a textual description, making it clear and easy for users to understand their options.
 - [x] **Images** - image on the last page of breathing 
 - [x] **DB/Login** - Input box and submit button for login. The rate emotions represent data pulled from the database. Also the journal will store data
-- [x] **WebSocket** - When you click the emotion buttons it will pop up with a response.
+- [x] **WebSocket** - Display how many users using the app
 
 ## CSS deliverable
 
